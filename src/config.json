@@ -1,0 +1,10 @@
+{
+  "mapbox": {
+    "token": "pk.eyJ1Ijoib2oiLCJhIjoiSEw0cDJaNCJ9.9ffK1AU2O26zvS5Zsa6eqw",
+    "style": "mapbox://styles/oj/cjo07c89n276q2spa9go6ai9f"
+  },
+  "airtable": {
+    "url":  "https://api.airtable.com/v0/appe2QPJNGquOBgw0/",
+    "key": "keyRHmFMa5W4S4TUJ"
+  }
+}
