@@ -18,3 +18,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.marker {
+  -webkit-transition: width 2s height 2s; /* Safari */
+   transition: width 2s height 2s;
+}
