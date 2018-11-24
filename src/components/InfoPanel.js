@@ -2,7 +2,7 @@ import React from 'react';
 import MapData from './MapData.js'
 import BaseMap from './BaseMap.js'
 
-class TextList extends React.Component {
+class InfoPanel extends React.Component {
   constructor (props) {
     super(props)
 
@@ -23,14 +23,14 @@ class TextList extends React.Component {
           }
         }
         return false
-      }).map((point) => <div>{point.properties.Nombre}</div>)
+      }).map((point) => <div className="inline-block m-1 p-1 text-white bg-teal-dark">{point.properties.Nombre}</div>)
       console.log('points', points)
     }
 
-    return <div id="data" style={{zIndex: 100, position: 'absolute', right: '0px', color: '#f0f'}}>
+    return <div id="data" className="pin-r pin-b absolute p-2" style={{zIndex: 100, color: '#000', width: "400px"}}>
       {points}
     </div>
   }
 }
 
-export default TextList
+export default InfoPanel

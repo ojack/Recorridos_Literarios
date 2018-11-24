@@ -1,7 +1,7 @@
 import React from 'react';
 import MapData from './MapData.js'
 import BaseMap from './BaseMap.js'
-import TextList from './TextList.js'
+import InfoPanel from './InfoPanel.js'
 
 class MapContainer extends React.Component {
   constructor (props) {
@@ -38,7 +38,7 @@ class MapContainer extends React.Component {
   render () {
     return <div>
       <BaseMap geoJson={this.state.geoJson} loaded={this.state.loaded} updateBounds={this.updateBounds}/>
-      <TextList geoJson={this.state.geoJson} loaded={this.state.loaded} bounds={this.state.bounds}/>
+      <InfoPanel geoJson={this.state.geoJson} loaded={this.state.loaded} bounds={this.state.bounds}/>
     </div>
   }
 }

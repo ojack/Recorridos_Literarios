@@ -38,7 +38,7 @@ class BaseMap extends Component {
         var el = document.createElement('div');
         el.className = 'marker';
       //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
-        el.style.backgroundImage = 'url('+ pinGrey + ')';
+        el.style.backgroundImage = 'url('+ pinBlue + ')';
         el.style.width = '30px';
         el.style.height = '40px';
         el.style.backgroundSize = 'cover'
@@ -54,7 +54,7 @@ class BaseMap extends Component {
         }
         el.onmouseout = () => {
           console.log("mouse")
-          el.style.backgroundImage = 'url('+ pinGrey + ')';
+          el.style.backgroundImage = 'url('+ pinBlue + ')';
           el.style.width = '30px';
           el.style.height = '40px';
         }
