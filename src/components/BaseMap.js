@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
 import config from './../config.json';
+import pinBlue from './../assets/pin-blue.png'
 
 class BaseMap extends Component {
   constructor() {
@@ -32,16 +33,17 @@ class BaseMap extends Component {
         console.log(point)
         var el = document.createElement('div');
         el.className = 'marker';
-        el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
-        el.style.width = '275px';
-        el.style.height = '275px';
+        el.style.backgroundImage = 'url(' + pinBlue + ')'
+        el.style.backgroundSize = 'contain'
+        el.style.width = '50px';
+        el.style.height = '69px';
 
         el.addEventListener('click', function() {
             window.alert(JSON.stringify(point))
         });
 
         // add marker to map
-   new mapboxgl.Marker(el)
+     new mapboxgl.Marker(el)
        .setLngLat(point.geometry.coordinates)
        .addTo(this.map);
       })
