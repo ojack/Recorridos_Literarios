@@ -38,6 +38,31 @@ class MapData  {
 
   getGeoJsonFromPunto(punto) {
     if(punto.fields.Longitude && punto.fields.Latitude) {
+      //console.log("processing punto", punto)
+      var autores = []
+      var libros = []
+      var textos = []
+      if(punto.fields.Textos) {
+        var libroIds = []
+        textos = punto.fields.Textos.map((id) => {
+          var texto = this.Textos.byId[id]
+          if(libroIds.indexOf(texto.fields.Libro[0]) < 0) libroIds.push(texto.fields.Libro[0])
+          return texto
+        })
+
+        var autorIds = []
+        libros = libroIds.map((id) => {
+          var libro = this.Libros.byId[id]
+          if(autorIds.indexOf(libro.fields.Autor[0]) < 0) autorIds.push(libro.fields.Autor[0])
+          return libro
+        })
+        autores = autorIds.map((id) => this.Autores.byId[id])
+        console.log('libro ids', libros)
+      }
+      punto.fields.autores = autores
+      punto.fields.libros = libros
+      punto.fields.textos = textos
+      
       return {
         type: 'Feature',
         id: punto.id,

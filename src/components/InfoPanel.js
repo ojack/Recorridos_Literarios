@@ -27,7 +27,7 @@ class InfoPanel extends React.Component {
       console.log('points', points)
     }
 
-    return <div id="data" className="pin-r pin-b absolute p-2" style={{zIndex: 100, color: '#000', width: "400px"}}>
+    return <div id="data" className="pin-r pin-b absolute p-2 mb-10 mr-10" style={{zIndex: 100, color: '#000', width: "400px"}}>
       {points}
     </div>
   }
