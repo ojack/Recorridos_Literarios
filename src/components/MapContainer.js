@@ -1,6 +1,7 @@
 import React from 'react';
 import MapData from './MapData.js'
 import BaseMap from './BaseMap.js'
+import TextList from './TextList.js'
 
 class MapContainer extends React.Component {
   constructor (props) {
@@ -10,13 +11,20 @@ class MapContainer extends React.Component {
 
     this.state = {
       geoJson: {},
-      mapCenter: [],
-      textos: [],
-      userLocation: [],
-      selected: null,
-      loaded: false
+      // mapCenter: [],
+      // textos: [],
+      // userLocation: [],
+      // selected: null,
+      loaded: false,
+      bounds: null
     //  styleURL: this._mapOptions[0].data,
     }
+    this.updateBounds = this.updateBounds.bind(this)
+  }
+
+  updateBounds(newBounds) {
+    console.log('new bounds', newBounds)
+    this.setState({bounds: newBounds})
   }
 
   componentDidMount () {
@@ -28,7 +36,10 @@ class MapContainer extends React.Component {
   }
 
   render () {
-    return <BaseMap geoJson={this.state.geoJson} loaded={this.state.loaded}/>
+    return <div>
+      <BaseMap geoJson={this.state.geoJson} loaded={this.state.loaded} updateBounds={this.updateBounds}/>
+      <TextList geoJson={this.state.geoJson} loaded={this.state.loaded} bounds={this.state.bounds}/>
+    </div>
   }
 }
 
