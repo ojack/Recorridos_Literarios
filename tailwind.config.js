@@ -194,6 +194,7 @@ module.exports = {
 
   fonts: {
     'sans': [
+      'Chivo',
       'system-ui',
       'BlinkMacSystemFont',
       '-apple-system',

@@ -3,7 +3,7 @@ import MapData from './MapData.js'
 import BaseMap from './BaseMap.js'
 import WordBlock from './WordBlock.js'
 
-class InfoPanel extends React.Component {
+class DataViz extends React.Component {
   constructor (props) {
     super(props)
 
@@ -86,4 +86,4 @@ class InfoPanel extends React.Component {
   }
 }
 
-export default InfoPanel
+export default DataViz

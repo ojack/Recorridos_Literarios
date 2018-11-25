@@ -16,8 +16,8 @@ class BaseMap extends Component {
         container: this.rootEl,
         style: config.mapbox.style,
         attributionControl: 'false',
-        pitch: 60, // pitch in degrees
-        bearing: -60, // bearing in degrees
+        pitch: 80, // pitch in degrees
+      //  bearing: -60, // bearing in degrees
         center: [-74.065604, 4.652280],
         zoom: 14
     })
