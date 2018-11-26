@@ -1,16 +1,19 @@
 import React from 'react';
-import DataViz from './DataViz.js'
-import TextView from './TextView.js'
+import MapData from './MapData.js'
+import BaseMap from './BaseMap.js'
 
-class InfoPanel extends React.Component {
+class TextList extends React.Component {
+  constructor (props) {
+    super(props)
+
+
+  }
+
 
   render () {
-    var points = []
-
     // get features that are within bounds of current map view
     if(this.props.loaded===true && this.props.bounds !== null) {
-      // Filter points for points that are currently shown in the map view
-      points = this.props.geoJson.features.filter((feature) => {
+      var points = this.props.geoJson.features.filter((feature) => {
         var lng = feature.geometry.coordinates[0]
         var lat = feature.geometry.coordinates[1]
         console.log(lng, this.props.bounds._sw.lng, this.props.bounds._ne.lng)
@@ -20,14 +23,14 @@ class InfoPanel extends React.Component {
           }
         }
         return false
-      })
+      }).map((point) => <div>{point.properties.Nombre}</div>)
+      console.log('points', points)
     }
 
-    // <DataViz filteredPoints={points} />
-    return (<div>
-      <TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
-    </div>)
+    return <div id="data" style={{zIndex: 100, position: 'absolute', right: '0px', color: '#f0f'}}>
+      {points}
+    </div>
   }
 }
 
-export default InfoPanel
+export default TextList
