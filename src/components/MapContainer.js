@@ -38,7 +38,7 @@ class MapContainer extends React.Component {
   render () {
     return <div>
       <BaseMap geoJson={this.state.geoJson} loaded={this.state.loaded} updateBounds={this.updateBounds}/>
-      <InfoPanel geoJson={this.state.geoJson} loaded={this.state.loaded} bounds={this.state.bounds}/>
+      <InfoPanel geoJson={this.state.geoJson} data={this.mapData} loaded={this.state.loaded} bounds={this.state.bounds}/>
     </div>
   }
 }

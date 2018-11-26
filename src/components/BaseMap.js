@@ -32,11 +32,11 @@ class BaseMap extends Component {
   // Load points onto map
   componentWillReceiveProps (nextProps) {
     if(!this.props.loaded && nextProps.loaded) {
-      console.log('json is', nextProps)
+    //  console.log('json is', nextProps)
       var self = this
 
       nextProps.geoJson.features.forEach((point) => {
-        console.log(point)
+      //  console.log(point)
         var el = document.createElement('div');
         el.className = 'marker';
       //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
@@ -49,13 +49,13 @@ class BaseMap extends Component {
             // window.alert(JSON.stringify(point))
         });
         el.onmouseover = () => {
-          console.log("mouse")
+        //  console.log("mouse")
           el.style.backgroundImage = 'url('+ pinBlue + ')';
           el.style.width = '60px';
           el.style.height = '80px';
         }
         el.onmouseout = () => {
-          console.log("mouse")
+        //  console.log("mouse")
           el.style.backgroundImage = 'url('+ pinBlue + ')';
           el.style.width = '30px';
           el.style.height = '40px';
