@@ -24,6 +24,10 @@ class InfoPanel extends React.Component {
     }
 
     // <DataViz filteredPoints={points} />
+  //   <DataViz filteredPoints={points} />
+//<DataViz filteredPoints={points} />
+//<TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
+
     return (<div>
       <TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
     </div>)

@@ -37,9 +37,9 @@ class DataViz extends React.Component {
         className="pin-r pin-b absolute p-2 m-2 float-right"
         style={{zIndex: 100, color: '#000', width: "100%"}}
         >
-      <WordBlock className="bg-black" words={Object.values(uniqueLibros)} />
-      <WordBlock className="bg-black" words={Object.values(uniqueAutores)} />
-      <WordBlock className="bg-black" words={points} />
+      <WordBlock className="bg-black text-white" words={Object.values(uniqueLibros)} />
+      <WordBlock className="bg-grey-dark text-white " words={Object.values(uniqueAutores)} />
+      <WordBlock className="bg-teal-map text-white " words={points} />
     </div>
   }
 }

@@ -12,7 +12,7 @@ class WordBlock extends React.Component {
     var words = this.props.words.map((word) => {
       var size = 10 + word.count*2
       return (<div
-          className={"inline-block m-1 p-3 pt-1 pb-2 text-sm font-sans text-white float-right " + this.props.className}
+          className={"inline-block m-1 p-3 pt-1 pb-2 text-sm font-sans float-right " + this.props.className}
           style={{fontSize: size + 'px'}}
         >
           {word.label}

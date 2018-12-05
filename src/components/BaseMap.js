@@ -16,7 +16,7 @@ class BaseMap extends Component {
         container: this.rootEl,
         style: config.mapbox.style,
         attributionControl: 'false',
-        pitch: 80, // pitch in degrees
+        pitch: 120, // pitch in degrees
       //  bearing: -60, // bearing in degrees
         center: [-74.065604, 4.652280],
         zoom: 14
@@ -36,7 +36,9 @@ class BaseMap extends Component {
       var self = this
 
       nextProps.geoJson.features.forEach((point) => {
-      //  console.log(point)
+        console.log('loaded point', point)
+
+        //  create pin
         var el = document.createElement('div');
         el.className = 'marker';
       //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
@@ -60,7 +62,33 @@ class BaseMap extends Component {
           el.style.width = '30px';
           el.style.height = '40px';
         }
-
+      //   <div className="text-2xl">{this.props.libro.fields.Nombre} </div>
+        // var el = document.createElement('div');
+        // el.className = 'marker';
+        // el.innerHTML = `<div class="bg-black text-white p-4 text-large font-sans">
+        //     <div class="text-sm mb-4 italic">${point.properties.Nombre}</div>
+        //     </div>`
+      //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
+        // el.style.backgroundImage = 'url('+ pinBlue + ')';
+        // el.style.width = '30px';
+        // el.style.height = '40px';
+        // el.style.backgroundSize = 'cover'
+        //el.style.transition = 'width 2s height 2s'
+        el.addEventListener('click', function() {
+            // window.alert(JSON.stringify(point))
+        });
+        el.onmouseover = () => {
+        //  console.log("mouse")
+          el.style.backgroundImage = 'url('+ pinBlue + ')';
+          el.style.width = '60px';
+          el.style.height = '80px';
+        }
+        el.onmouseout = () => {
+        //  console.log("mouse")
+          el.style.backgroundImage = 'url('+ pinBlue + ')';
+          el.style.width = '30px';
+          el.style.height = '40px';
+        }
         // add marker to map
        new mapboxgl.Marker(el)
            .setLngLat(point.geometry.coordinates)

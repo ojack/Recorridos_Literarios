@@ -88,6 +88,7 @@ let colors = {
   'green-lighter': '#a2f5bf',
   'green-lightest': '#e3fcec',
 
+  'teal-map': '#168f90',
   'teal-darkest': '#0d3331',
   'teal-darker': '#20504f',
   'teal-dark': '#38a89d',
@@ -485,6 +486,7 @@ module.exports = {
     '32': '8rem',
     '48': '12rem',
     '64': '16rem',
+    '128': '32em',
     '1/2': '50%',
     '1/3': '33.33333%',
     '2/3': '66.66667%',
