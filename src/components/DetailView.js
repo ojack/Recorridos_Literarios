@@ -14,9 +14,14 @@ class DetailView extends React.Component {
             "<span dangerouslySetInnerHTML={{__html: point.textoCorto}}></span>"
           </div>
           <div className="p-4 text-large font-sans text-white flex-1">
-              <div className="text-4xl mb-6 cursor-pointer hover:text-black" onClick={()=> { this.props.searchMapData('libro:'+point.libro) }}>{point.libro} </div>
-              <div>{point.autor} </div>
-              <div className="italic">{point.punto} </div>
+              <div
+                className="text-4xl mb-6 cursor-pointer hover:text-black"
+                onClick={()=> { this.props.searchMapData('libro:'+point.libro) }}
+                >
+                  {point.libro}
+              </div>
+              <div className="cursor-pointer hover:text-black" onClick={()=> { this.props.searchMapData('autor:'+point.autor) }}>{point.autor} </div>
+              <div className="cursor-pointer hover:text-black italic" onClick={()=> { this.props.searchMapData('punto:'+point.punto) }}>{point.punto} </div>
           </div>
         </div>
         <i onClick={() => this.props.getNextTexto(this.props.point)} className="fas fa-chevron-right text-4xl text-white hover:text-black cursor-pointer m-12"></i>

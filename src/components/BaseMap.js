@@ -82,16 +82,37 @@ class BaseMap extends Component {
       })
       }
           if(nextProps.searchResults !== this.props.searchResults) {
-            console.log("NEW Search results", nextProps)
             self.clearSearch()
             if(nextProps.searchResults.length > 0) {
+              console.log(nextProps.searchResults, self.markersById[nextProps.searchResults[0].ref])
+              var feat = self.markersById[nextProps.searchResults[0].ref].point
+
+              var n = feat.geometry.coordinates[1]
+              var s = feat.geometry.coordinates[1]
+              var e = feat.geometry.coordinates[0]
+              var w = feat.geometry.coordinates[0]
+
               nextProps.searchResults.forEach((res) => {
                 var marker = self.markersById[res.ref]
                 marker.isSearchResult = true
-                // el.style.backgroundImage = 'url('+ pinResults + ')';
-                // el.style.width = '30px';
-                // el.style.height = '50px';
+                console.log('marker', marker)
+                var feat = marker.point
+                // expand bounds to fit new point. note, this only works for bogota because of +- coords
+                if (feat.geometry.coordinates[1] > n) n = feat.geometry.coordinates[1]
+                if (feat.geometry.coordinates[1] < s) s = feat.geometry.coordinates[1]
+                if (feat.geometry.coordinates[0] < w) w = feat.geometry.coordinates[0]
+                if (feat.geometry.coordinates[0] > e) e = feat.geometry.coordinates[0]
               })
+              console.log('coords', n, s, e, w)
+              // var sw = new mapboxgl.LngLat(-73.9876, 40.7661);
+              // var ne = new mapboxgl.LngLat(-73.9397, 40.8002);
+
+              var sw = new mapboxgl.LngLat( w, s,)
+              var ne = new mapboxgl.LngLat(e, n)
+              var llb = new mapboxgl.LngLatBounds(sw, ne);
+              console.log(llb)
+              //this.map.fitBounds([[s, w],[n, e]])
+              this.map.fitBounds(llb)
             }
             this.updatePointStyles()
           //  nextProps.searchResults.forEach
