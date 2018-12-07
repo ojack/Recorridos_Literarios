@@ -1,5 +1,6 @@
 // load all data, methods to get nearest
 import config from './../config.json';
+import lunr from 'lunr'
 
 const baseUrl ='https://api.airtable.com/v0/appe2QPJNGquOBgw0/'
 const fetchUrls = ['Textos', 'Puntos', 'Autores', 'Libros']
@@ -25,7 +26,9 @@ class MapData  {
       byId: {}
     }
     this.features = []
+    this.lunr = null
   }
+
 
   getTextosGeoJson() {
     let features = []
@@ -40,11 +43,28 @@ class MapData  {
             let libro = this.Libros.byId[texto.fields.Libro[0]]
             let autor = this.Autores.byId[libro.fields.Autor[0]]
           //  let punto = this.Puntos.byId[texto.fields.Puntos[0]]
-            var textoObj = Object.assign({}, texto, {libro: libro, autor: autor, punto: punto})
+            //var textoObj = Object.assign({}, texto, {libro: libro, autor: autor, punto: punto})
+
+            // add all parameters to be indexed (meaning they will be searchable) to "fields" object
+            texto.fields.libro = libro.fields.Nombre
+            texto.fields.autor = autor.fields.Nombre
+            texto.fields.punto = punto.fields.Nombre
+
+            var textoObj = Object.assign({}, {
+              libro: libro.fields.Nombre,
+              autor: autor.fields.Nombre,
+              punto: punto.fields.Nombre,
+              textos: texto.fields.Textos,
+              textosCorto: texto.fields.Textos_corto,
+              createdTime: texto.createdTime,
+              paginaInicio: texto.fields['Pagina inicio']
+            })
+
             features.push({
               type: 'Feature',
-              id: punto.id,
+              uniqueId: texto.id + punto.id,
               properties: textoObj,
+              index: features.length,
               geometry: {
                 type: 'Point',
                 coordinates: [ punto.fields.Longitude += Math.random() * 0.0008 - 0.0004, punto.fields.Latitude += Math.random() * 0.0008 - 0.0004]

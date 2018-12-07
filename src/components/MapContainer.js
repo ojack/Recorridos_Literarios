@@ -19,22 +19,38 @@ class MapContainer extends React.Component {
       loaded: false,
       bounds: null,
       center: {lng: -74.065604, lat: 4.652280},
-      selectedPoint: null
+      selectedPoint: null,
+      animate: false
     //  styleURL: this._mapOptions[0].data,
     }
-    this.updateBounds = this.updateBounds.bind(this)
+    //this.updateBounds = this.updateBounds.bind(this)
     this.updateSelectedPoint = this.updateSelectedPoint.bind(this)
+    this.getNextTexto = this.getNextTexto.bind(this)
+    this.getPreviousTexto = this.getPreviousTexto.bind(this)
   }
 
-  updateSelectedPoint(point) {
-    console.log('selected point', point)
-    this.setState({selectedPoint: point})
+  updateSelectedPoint(point, animate) {
+    console.log('selected point', point, animate)
+    this.setState({selectedPoint: point, animate: animate})
   }
 
-  updateBounds(newBounds, center) {
-    console.log('new bounds', newBounds, center)
-    this.setState({bounds: newBounds})
+  getNextTexto(point) {
+    var index = point.index
+    index++
+    if(point.index >= this.state.geoJson.features.length) index = 0
+    this.setState({ selectedPoint: this.state.geoJson.features[index], animate: true})
   }
+
+  getPreviousTexto(point) {
+    var index = point.index
+    index--
+    if(point.index < 0) index = this.state.geoJson.features.length - 1
+    this.setState({ selectedPoint: this.state.geoJson.features[index], animate: true})
+  }
+  // updateBounds(newBounds, center) {
+  //   console.log('new bounds', newBounds, center)
+  //   this.setState({bounds: newBounds})
+  // }
 
   componentDidMount () {
     this.mapData.loadData().then(()=>{
@@ -47,10 +63,22 @@ class MapContainer extends React.Component {
   }
   // <InfoPanel geoJson={this.state.geoJson} data={this.mapData} loaded={this.state.loaded} bounds={this.state.bounds}/>
   // <DetailView point={this.state.selectedPoint} />
+  //updateBounds={this.updateBounds}
   render () {
     return <div>
-      <BaseMap geoJson={this.state.geoJson} loaded={this.state.loaded} updateSelectedPoint={this.updateSelectedPoint} updateBounds={this.updateBounds} center={this.state.center}/>
-      <DetailView point={this.state.selectedPoint} />
+      <BaseMap
+        geoJson={this.state.geoJson}
+        loaded={this.state.loaded}
+        updateSelectedPoint={this.updateSelectedPoint}
+        animate={this.state.animate}
+        center={this.state.center}
+        selectedPoint={this.state.selectedPoint === null ? null : this.state.selectedPoint.uniqueId}
+      />
+      <DetailView
+        point={this.state.selectedPoint}
+        getNextTexto = {this.getNextTexto}
+        getPreviousTexto = {this.getPreviousTexto}
+      />
     </div>
   }
 }

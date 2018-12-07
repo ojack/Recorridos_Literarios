@@ -3123,7 +3123,7 @@ table {
 }
 
 .leading-loose {
-  line-height: 2;
+  line-height: 1.75;
 }
 
 .m-0 {
@@ -6151,6 +6151,11 @@ table {
 
 /* Your custom CSS here */
 
+.gradient {
+  background-image: -webkit-linear-gradient(rgba(236, 236, 236, 0) 0%, rgba(208, 75, 67, 1) 60%);
+  background-image: linear-gradient(rgba(236, 236, 236, 0) 0%, rgba(208, 75, 67, 1) 60%);
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
@@ -8779,7 +8784,7 @@ table {
   }
 
   .sm\:leading-loose {
-    line-height: 2;
+    line-height: 1.75;
   }
 
   .sm\:m-0 {
@@ -14418,7 +14423,7 @@ table {
   }
 
   .md\:leading-loose {
-    line-height: 2;
+    line-height: 1.75;
   }
 
   .md\:m-0 {
@@ -20057,7 +20062,7 @@ table {
   }
 
   .lg\:leading-loose {
-    line-height: 2;
+    line-height: 1.75;
   }
 
   .lg\:m-0 {
@@ -25696,7 +25701,7 @@ table {
   }
 
   .xl\:leading-loose {
-    line-height: 2;
+    line-height: 1.75;
   }
 
   .xl\:m-0 {
