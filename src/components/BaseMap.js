@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl'
 import config from './../config.json';
 import pin from './../assets/pin.png'
 import pinSelected from './../assets/pin-selected.png'
+import pinResults from './../assets/pin-results.png'
 
 
 class BaseMap extends Component {
@@ -44,13 +45,9 @@ class BaseMap extends Component {
 
         //  create pin
         var el = document.createElement('div');
-        el.className = 'marker';
-      //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
-        el.style.backgroundImage = 'url('+ pin + ')';
-        el.style.width = '30px';
-        el.style.height = '50px';
-        el.style.backgroundSize = 'cover'
-        //el.style.transition = 'width 2s height 2s'
+        //el.className = 'marker';
+        el.classList.add('marker');
+
         el.addEventListener('click', function() {
             // window.alert(JSON.stringify(point))
             console.log("clicked")
@@ -78,91 +75,74 @@ class BaseMap extends Component {
             self.markersById[point.uniqueId] = {
               point: point,
               el: el,
-              marker: marker
+              marker: marker,
+              isSelected: false,
+              isSearchResult: false
             }
       })
       }
+          if(nextProps.searchResults !== this.props.searchResults) {
+            console.log("NEW Search results", nextProps)
+            self.clearSearch()
+            if(nextProps.searchResults.length > 0) {
+              nextProps.searchResults.forEach((res) => {
+                var marker = self.markersById[res.ref]
+                marker.isSearchResult = true
+                // el.style.backgroundImage = 'url('+ pinResults + ')';
+                // el.style.width = '30px';
+                // el.style.height = '50px';
+              })
+            }
+            this.updatePointStyles()
+          //  nextProps.searchResults.forEach
+          }
     //    if(nextProps.selectedPoint !== null) {
           if(nextProps.selectedPoint !== this.props.selectedPoint) {
-
-            console.log("NEW SELECTIONS", nextProps)
-            self.clearPins()
+            console.log("NEW SELECTION", nextProps)
+            self.clearSelection()
             if(nextProps.selectedPoint !== null) {
               var selectedPoint = this.markersById[nextProps.selectedPoint]
-              var el = selectedPoint.el
-              el.style.backgroundImage = 'url('+ pinSelected + ')';
-              el.style.width = '35px';
-              el.style.height = '75px';
               if(nextProps.animate === true) {
                 self.map.flyTo({ center: selectedPoint.point.geometry.coordinates, zoom: 18})
               }
+              selectedPoint.isSelected = true
             }
+            this.updatePointStyles()
           } else if(nextProps.animate === true && this.props.animate !== true) {
+              self.clearSelection()
               var selectedPoint = this.markersById[nextProps.selectedPoint]
+              selectedPoint.isSelected = true
               self.map.flyTo({ center: selectedPoint.point.geometry.coordinates, zoom: 18})
+              this.updatePointStyles()
           }
-  //    }
-        // el.onmouseclick = () => {
-        //
-        // }
-      //   <div className="text-2xl">{this.props.libro.fields.Nombre} </div>
-        // var el = document.createElement('div');
-        // el.className = 'marker';
-        // el.innerHTML = `<div class="bg-black text-white p-4 text-large font-sans">
-        //     <div class="text-sm mb-4 italic">${point.properties.Nombre}</div>
-        //     </div>`
-      //  el.style.backgroundImage = 'url(http://thedeependdesign.com/wp-content/uploads/2012/11/8-bit-275x275-27.png)';
-        // el.style.backgroundImage = 'url('+ pinSelected + ')';
-        // el.style.width = '30px';
-        // el.style.height = '40px';
-        // el.style.backgroundSize = 'cover'
-        //el.style.transition = 'width 2s height 2s'
-
-
-
-        // el.onmouseover = () => {
-        // //  console.log("mouse")
-        //   el.style.backgroundImage = 'url('+ pinSelected + ')';
-        //   el.style.width = '35px';
-        //   el.style.height = '75px';
-        //   self.props.updateSelectedPoint(point)
-        // }
-        // el.onmouseout = () => {
-        // //  console.log("mouse")
-        //   el.style.backgroundImage = 'url('+ pin + ')';
-        //   el.style.width = '30px';
-        //   el.style.height = '40px';
-        // //  self.props.updateSelectedPoint(null)
-        // }
-        // add marker to map
-
-
-      // this.map.addLayer({
-      //   "id": "points",
-      //   "type": "symbol",
-      //   "source": {
-      //     "type": "geojson",
-      //     "data": nextProps.geoJson
-      //   }
-      // })
-
-      // this.map.on('move', () => {
-      //   //var features = self.map.queryRenderedFeatures()
-      //   // console.log(features)
-      //   var bounds = self.map.getBounds()
-      //   var center = self.map.getCenter()
-      // //  console.log(bounds)
-      //   self.props.updateBounds(bounds, center)
-      // })
-
   }
 
-  // reset pins to defaultState
-  clearPins() {
+  updatePointStyles() {
+    console.log('updating styles')
     Object.values(this.markersById).forEach((marker) => {
-      marker.el.style.backgroundImage = 'url('+ pin + ')';
-      marker.el.style.width = '30px';
-      marker.el.style.height = '50px';
+      if(marker.isSelected == true) {
+        marker.el.classList.add('selected');
+      } else {
+        marker.el.classList.remove('selected');
+      }
+      if(marker.isSearchResult == true) {
+        marker.el.classList.add('results');
+      } else {
+        marker.el.classList.remove('results');
+      }
+    })
+  }
+
+  clearSearch() {
+    Object.values(this.markersById).forEach((marker) => {
+      marker.isSearchResult = false
+    })
+  }
+
+    // reset pins to defaultState
+  clearSelection() {
+    Object.values(this.markersById).forEach((marker) => {
+      marker.isSelected = false
     })
   }
 

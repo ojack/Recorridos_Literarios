@@ -20,18 +20,26 @@ class MapContainer extends React.Component {
       bounds: null,
       center: {lng: -74.065604, lat: 4.652280},
       selectedPoint: null,
-      animate: false
+      animate: false,
+      searchResults: []
     //  styleURL: this._mapOptions[0].data,
     }
     //this.updateBounds = this.updateBounds.bind(this)
     this.updateSelectedPoint = this.updateSelectedPoint.bind(this)
     this.getNextTexto = this.getNextTexto.bind(this)
     this.getPreviousTexto = this.getPreviousTexto.bind(this)
+    this.searchMapData = this.searchMapData.bind(this)
   }
 
   updateSelectedPoint(point, animate) {
     console.log('selected point', point, animate)
     this.setState({selectedPoint: point, animate: animate})
+  }
+
+  searchMapData(query) {
+    var results = this.mapData.searchData(query)
+    console.log('results', query, results)
+    this.setState({ searchResults: results})
   }
 
   getNextTexto(point) {
@@ -73,11 +81,13 @@ class MapContainer extends React.Component {
         animate={this.state.animate}
         center={this.state.center}
         selectedPoint={this.state.selectedPoint === null ? null : this.state.selectedPoint.uniqueId}
+        searchResults = {this.state.searchResults}
       />
       <DetailView
         point={this.state.selectedPoint}
         getNextTexto = {this.getNextTexto}
         getPreviousTexto = {this.getPreviousTexto}
+        searchMapData = {this.searchMapData}
       />
     </div>
   }

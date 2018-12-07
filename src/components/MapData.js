@@ -1,6 +1,8 @@
 // load all data, methods to get nearest
 import config from './../config.json';
 import lunr from 'lunr'
+require("lunr-languages/lunr.stemmer.support")(lunr)
+require("lunr-languages/lunr.es")(lunr)
 
 const baseUrl ='https://api.airtable.com/v0/appe2QPJNGquOBgw0/'
 const fetchUrls = ['Textos', 'Puntos', 'Autores', 'Libros']
@@ -32,6 +34,9 @@ class MapData  {
 
   getTextosGeoJson() {
     let features = []
+
+
+
     this.Textos.all.forEach((id) => {
       var texto = this.Textos.byId[id]
     //  console.log('texto', texto)
@@ -54,11 +59,13 @@ class MapData  {
               libro: libro.fields.Nombre,
               autor: autor.fields.Nombre,
               punto: punto.fields.Nombre,
-              textos: texto.fields.Textos,
-              textosCorto: texto.fields.Textos_corto,
+              texto: texto.fields.Textos,
+              textoCorto: texto.fields.Textos_corto,
               createdTime: texto.createdTime,
-              paginaInicio: texto.fields['Pagina inicio']
+              paginaInicio: texto.fields['Pagina inicio'],
+              uniqueId: texto.id + punto.id
             })
+
 
             features.push({
               type: 'Feature',
@@ -70,11 +77,28 @@ class MapData  {
                 coordinates: [ punto.fields.Longitude += Math.random() * 0.0008 - 0.0004, punto.fields.Latitude += Math.random() * 0.0008 - 0.0004]
               }
             })
+
+
           }
         })
       }
     })
     this.features = features
+
+    this.lunr = lunr( function() {
+      this.use(lunr.es)
+      this.ref('uniqueId')
+      this.field('autor')
+      this.field('libro')
+      this.field('texto')
+      this.field('punto')
+
+      features.forEach((feature) => {
+        this.add(feature.properties)
+      })
+    })
+
+  //  console.log("SEARCH", this.lunr, this.lunr.search('javier'))
     return {
       type: 'FeatureCollection',
       features: features
@@ -132,6 +156,12 @@ class MapData  {
   //     return undefined
   //   }
   // }
+
+  searchData(query) {
+    return this.lunr.search(query)
+  }
+
+  
 
   loadData() {
     let header = 'Bearer ' + config.airtable.key

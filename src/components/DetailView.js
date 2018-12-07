@@ -11,10 +11,10 @@ class DetailView extends React.Component {
         <i onClick={() => this.props.getPreviousTexto(this.props.point)} className="fas fa-chevron-left text-4xl text-white hover:text-black cursor-pointer m-12"></i>
         <div className="max-w-xl flex flex-col sm:flex-row flex items-center overflow-auto ">
           <div className="h-1/2 p-4 text-black leading-loose pb-3 font-sans" style={{ flex:2 }}>
-            "<span dangerouslySetInnerHTML={{__html: point.textosCorto}}></span>"
+            "<span dangerouslySetInnerHTML={{__html: point.textoCorto}}></span>"
           </div>
           <div className="p-4 text-large font-sans text-white flex-1">
-              <div className="text-4xl mb-6">{point.libro} </div>
+              <div className="text-4xl mb-6 cursor-pointer hover:text-black" onClick={()=> { this.props.searchMapData('libro:'+point.libro) }}>{point.libro} </div>
               <div>{point.autor} </div>
               <div className="italic">{point.punto} </div>
           </div>
