@@ -1,6 +1,6 @@
 import React from 'react';
 import DataViz from './DataViz.js'
-import TextView from './TextView.js'
+//import TextView from './TextView.js'
 
 class InfoPanel extends React.Component {
 
@@ -11,7 +11,8 @@ class InfoPanel extends React.Component {
     if(this.props.loaded===true && this.props.bounds !== null) {
       // Filter points for points that are currently shown in the map view
       points = this.props.geoJson.features.filter((feature) => {
-        var lng = feature.geometry.coordinates[0]
+        // add random factor to point to separate nearby points
+        var lng = feature.geometry.coordinates[0] + Math.random()*0.1
         var lat = feature.geometry.coordinates[1]
         console.log(lng, this.props.bounds._sw.lng, this.props.bounds._ne.lng)
         if(lng > this.props.bounds._sw.lng && lng < this.props.bounds._ne.lng){
@@ -27,9 +28,10 @@ class InfoPanel extends React.Component {
   //   <DataViz filteredPoints={points} />
 //<DataViz filteredPoints={points} />
 //<TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
-
+//       <TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
+//  <DataViz filteredPoints={points} />
     return (<div>
-      <TextView filteredPoints={points} data={this.props.data} loaded={this.props.loaded}/>
+
     </div>)
   }
 }

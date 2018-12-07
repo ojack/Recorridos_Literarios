@@ -24,59 +24,94 @@ class MapData  {
       all: [],
       byId: {}
     }
+    this.features = []
   }
 
-  getGeoJson() {
-    let features = this.Puntos.all.map((id) => this.Puntos.byId[id])
-    .filter((punto) => punto.fields.Longitude && punto.fields.Latitude)
-    .map((punto)=> this.getGeoJsonFromPunto(punto))
+  getTextosGeoJson() {
+    let features = []
+    this.Textos.all.forEach((id) => {
+      var texto = this.Textos.byId[id]
+    //  console.log('texto', texto)
+      if(texto.fields.Puntos) {
+        texto.fields.Puntos.forEach((puntoId) => {
+          var punto = this.Puntos.byId[puntoId]
+          if (punto.fields.Longitude && punto.fields.Latitude) {
+          //  punto.fields.Longitude
+            let libro = this.Libros.byId[texto.fields.Libro[0]]
+            let autor = this.Autores.byId[libro.fields.Autor[0]]
+          //  let punto = this.Puntos.byId[texto.fields.Puntos[0]]
+            var textoObj = Object.assign({}, texto, {libro: libro, autor: autor, punto: punto})
+            features.push({
+              type: 'Feature',
+              id: punto.id,
+              properties: textoObj,
+              geometry: {
+                type: 'Point',
+                coordinates: [ punto.fields.Longitude += Math.random() * 0.0008 - 0.0004, punto.fields.Latitude += Math.random() * 0.0008 - 0.0004]
+              }
+            })
+          }
+        })
+      }
+    })
+    this.features = features
     return {
       type: 'FeatureCollection',
       features: features
     }
   }
 
-  getGeoJsonFromPunto(punto) {
-    if(punto.fields.Longitude && punto.fields.Latitude) {
-      //console.log("processing punto", punto)
-      var autores = []
-      var libros = []
-      var textos = []
-      if(punto.fields.Textos) {
-        var libroIds = []
-        textos = punto.fields.Textos.map((id) => {
-          var texto = this.Textos.byId[id]
-          if(libroIds.indexOf(texto.fields.Libro[0]) < 0) libroIds.push(texto.fields.Libro[0])
-          return texto
-        })
+  // getGeoJson() {
+  //   let features = this.Puntos.all.map((id) => this.Puntos.byId[id])
+  //   .filter((punto) => punto.fields.Longitude && punto.fields.Latitude)
+  //   .map((punto)=> this.getGeoJsonFromPunto(punto))
+  //   return {
+  //     type: 'FeatureCollection',
+  //     features: features
+  //   }
+  // }
 
-        var autorIds = []
-        libros = libroIds.map((id) => {
-          var libro = this.Libros.byId[id]
-          if(autorIds.indexOf(libro.fields.Autor[0]) < 0) autorIds.push(libro.fields.Autor[0])
-          return libro
-        })
-        autores = autorIds.map((id) => this.Autores.byId[id])
-        console.log('libro ids', libros)
-      }
-      punto.fields.autores = autores
-      punto.fields.libros = libros
-      punto.fields.textos = textos
-      
-      return {
-        type: 'Feature',
-        id: punto.id,
-        properties: punto.fields,
-        geometry: {
-          type: 'Point',
-          coordinates: [ punto.fields.Longitude, punto.fields.Latitude ]
-        }
-      }
-    } else {
-      console.log('NO COORDS', punto)
-      return undefined
-    }
-  }
+  // getGeoJsonFromPunto(punto) {
+  //   if(punto.fields.Longitude && punto.fields.Latitude) {
+  //     //console.log("processing punto", punto)
+  //     var autores = []
+  //     var libros = []
+  //     var textos = []
+  //     if(punto.fields.Textos) {
+  //       var libroIds = []
+  //       textos = punto.fields.Textos.map((id) => {
+  //         var texto = this.Textos.byId[id]
+  //         if(libroIds.indexOf(texto.fields.Libro[0]) < 0) libroIds.push(texto.fields.Libro[0])
+  //         return texto
+  //       })
+  //
+  //       var autorIds = []
+  //       libros = libroIds.map((id) => {
+  //         var libro = this.Libros.byId[id]
+  //         if(autorIds.indexOf(libro.fields.Autor[0]) < 0) autorIds.push(libro.fields.Autor[0])
+  //         return libro
+  //       })
+  //       autores = autorIds.map((id) => this.Autores.byId[id])
+  //       console.log('libro ids', libros)
+  //     }
+  //     punto.fields.autores = autores
+  //     punto.fields.libros = libros
+  //     punto.fields.textos = textos
+  //
+  //     return {
+  //       type: 'Feature',
+  //       id: punto.id,
+  //       properties: punto.fields,
+  //       geometry: {
+  //         type: 'Point',
+  //         coordinates: [ punto.fields.Longitude, punto.fields.Latitude ]
+  //       }
+  //     }
+  //   } else {
+  //     console.log('NO COORDS', punto)
+  //     return undefined
+  //   }
+  // }
 
   loadData() {
     let header = 'Bearer ' + config.airtable.key
@@ -136,30 +171,35 @@ class MapData  {
       return null
   }
 
-  getNearestTexts(point, number) {
-
+  // to do: how to optimize?
+  sortByDistance(point) {
+    this.features.sort((a, b) => a)
   }
+
+  // getNearestTexts(point, number) {
+  //
+  // }
 // to do: possibly cache results of filtering or add author and book info as soon as downloaded?
   getTextsInBounds(bounds) {
-    let textos = {}
-    //console.log(bounds)
-    this.Puntos.all.map(id => this.Puntos.byId[id])
-      .filter(punto => punto.fields.Latitude < bounds[0][1] && punto.fields.Latitude > bounds[1][1] && punto.fields.Longitude > bounds[1][0] && punto.fields.Longitude < bounds[0][0])
-      .filter(punto => punto.fields.Textos)
-      .forEach(punto => {
-      //  console.log("punto", punto.fields)
-      //  console.log("adding to array", punto, textos, punto.fields.Textos)
-          punto.fields.Textos.forEach((id) => {
-            textos[id] = this.Textos.byId[id]
-          })
-      })
-    return Object.keys(textos).map(id => {
-        let texto = this.Textos.byId[id]
-        let libro = this.Libros.byId[texto.fields.Libro[0]]
-        let autor = this.Autores.byId[libro.fields.Autor[0]]
-        let punto = this.Puntos.byId[texto.fields.Puntos[0]]
-        return Object.assign({}, texto, {libro: libro, autor: autor, punto: punto})
-    })
+    // let textos = {}
+    // //console.log(bounds)
+    // this.Puntos.all.map(id => this.Puntos.byId[id])
+    //   .filter(punto => punto.fields.Latitude < bounds[0][1] && punto.fields.Latitude > bounds[1][1] && punto.fields.Longitude > bounds[1][0] && punto.fields.Longitude < bounds[0][0])
+    //   .filter(punto => punto.fields.Textos)
+    //   .forEach(punto => {
+    //   //  console.log("punto", punto.fields)
+    //   //  console.log("adding to array", punto, textos, punto.fields.Textos)
+    //       punto.fields.Textos.forEach((id) => {
+    //         textos[id] = this.Textos.byId[id]
+    //       })
+    //   })
+    // return Object.keys(textos).map(id => {
+    //     let texto = this.Textos.byId[id]
+    //     let libro = this.Libros.byId[texto.fields.Libro[0]]
+    //     let autor = this.Autores.byId[libro.fields.Autor[0]]
+    //     let punto = this.Puntos.byId[texto.fields.Puntos[0]]
+    //     return Object.assign({}, texto, {libro: libro, autor: autor, punto: punto})
+    // })
   }
 }
 

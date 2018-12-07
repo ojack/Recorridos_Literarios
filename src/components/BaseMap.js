@@ -18,7 +18,8 @@ class BaseMap extends Component {
         attributionControl: 'false',
         pitch: 120, // pitch in degrees
       //  bearing: -60, // bearing in degrees
-        center: [-74.065604, 4.652280],
+      //  center: [-74.065604, 4.652280],
+        center: this.props.center,
         zoom: 14
     })
 
@@ -82,12 +83,14 @@ class BaseMap extends Component {
           el.style.backgroundImage = 'url('+ pinBlue + ')';
           el.style.width = '60px';
           el.style.height = '80px';
+          self.props.updateSelectedPoint(point)
         }
         el.onmouseout = () => {
         //  console.log("mouse")
           el.style.backgroundImage = 'url('+ pinBlue + ')';
           el.style.width = '30px';
           el.style.height = '40px';
+        //  self.props.updateSelectedPoint(null)
         }
         // add marker to map
        new mapboxgl.Marker(el)
@@ -107,8 +110,9 @@ class BaseMap extends Component {
         //var features = self.map.queryRenderedFeatures()
         // console.log(features)
         var bounds = self.map.getBounds()
+        var center = self.map.getCenter()
       //  console.log(bounds)
-        self.props.updateBounds(bounds)
+        self.props.updateBounds(bounds, center)
       })
     }
   }
@@ -116,7 +120,7 @@ class BaseMap extends Component {
   render() {
     return (
       <div id='map'
-        style={{width: '100%', height: '100%', position: 'fixed', top: '0px', bottom: '0px', left: '0px'}}
+        style={{width: '50%', height: '100%', position: 'fixed', top: '0px', bottom: '0px', left: '0px'}}
         ref={element => this.rootEl = element}
       >
       </div>
